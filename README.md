@@ -1,75 +1,18 @@
-# React + TypeScript + Vite
+# Módulo 8 - Cloud: GitHub Pages con GitHub Actions
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+App Vite + React + TypeScript desplegada automáticamente en GitHub Pages con GitHub Actions.
 
-Currently, two official plugins are available:
+## Enlace
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **App desplegada:** https://danivegi.github.io/modulo08-cloud-gh-pages-auto/
 
-## React Compiler
+## Cómo se despliega
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Cada merge a `main` ejecuta el workflow `.github/workflows/deploy.yml`, que tiene dos jobs:
 
-## Expanding the ESLint configuration
+1. **build:** instala dependencias con `npm ci`, ejecuta `npm run build` y sube la carpeta `dist` como artifact de Pages.
+2. **deploy:** publica ese artifact en GitHub Pages con `actions/deploy-pages`.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+GitHub Pages está configurado con la fuente "GitHub Actions" (Settings → Pages). `vite.config.ts` usa `base: './'` porque la app se sirve en una subcarpeta.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
-
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+El historial de ejecuciones puede verse en la pestaña Actions.
